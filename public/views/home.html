@@ -26,13 +26,22 @@
       <p>Please check environment variable : {{env.api_url}}</p>
     </div>
     <div ng-if="apiConnectionStatus.state=='success'">
-      <div class="alert alert-success text-center">{{apiConnectionStatus.msg}}</div>
+      <div class="alert alert-success text-center">
 
-      <p>Successfully received response from : {{env.api_url}}</p>
+        {{apiConnectionStatus.msg}}
+        <p>Connected to : {{env.api_url}}</p>
+      </div>
 
-      <p>API Build Number: {{apiBuildnum}}</p>
+      <div class="panel panel-success">
+        <div class="panel-heading">
+          <h3 class="panel-title">Response :</h3>
+        </div>
+        <div class="panel-body">
+          <p>API Build Number: {{apiBuildnum}}</p>
 
-      <p>API Time: {{apiAccessTime ? apiAccessTime: 'No Time Reported!'}}</p>
+          <p>API Time: {{apiAccessTime ? apiAccessTime: 'No Time Reported!'}}</p>
+        </div>
+      </div>
     </div>
   </div>
 

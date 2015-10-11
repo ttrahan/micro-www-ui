@@ -19,25 +19,20 @@
   </div>
 
   <div class="jumbotron">
-    <h1>API micro service - Status</h1>
+    <h2>API micro service - Status</h2>
 
     <div ng-if="apiConnectionStatus.state=='error'">
-      <div class="bs-callout bs-callout-danger">
-        <h4>{{apiConnectionStatus.msg}}</h4>
-
-        <p>Please check environment variable : {{env.api_url}}</p>
-      </div>
+      <div class="alert alert-danger text-center">{{apiConnectionStatus.msg}}</div>
+      <p>Please check environment variable : {{env.api_url}}</p>
     </div>
     <div ng-if="apiConnectionStatus.state=='success'">
-      <div class="bs-callout bs-callout-success">
-        <h4>{{apiConnectionStatus.msg}}</h4>
+      <div class="alert alert-success text-center">{{apiConnectionStatus.msg}}</div>
 
-        <p>Successfully received response from : {{env.api_url}}</p>
+      <p>Successfully received response from : {{env.api_url}}</p>
 
-        <p>API Build Number: {{apiBuildnum}}</p>
+      <p>API Build Number: {{apiBuildnum}}</p>
 
-        <p>API Time: {{apiAccessTime ? apiAccessTime: 'No Time Reported!'}}</p>
-      </div>
+      <p>API Time: {{apiAccessTime ? apiAccessTime: 'No Time Reported!'}}</p>
     </div>
   </div>
 

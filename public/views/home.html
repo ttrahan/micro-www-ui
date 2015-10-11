@@ -15,26 +15,30 @@
 <body ng-controller="mainCtrl">
 <div class="container">
   <div class="masthead">
-    <h3 class="text-muted">WWW micro service</h3>
+    <h1 class="text-muted">WWW micro service</h1>
   </div>
 
   <div class="jumbotron">
-    <h2>API micro service - Status</h2>
+    <h3>API micro service - Status</h3>
 
     <div ng-if="apiConnectionStatus.state=='error'">
       <div class="alert alert-danger text-center">{{apiConnectionStatus.msg}}</div>
-      <p>Please check environment variable : {{env.api_url}}</p>
+
+      <div class="panel panel-danger">
+        <div class="panel-heading">
+          <h3 class="panel-title">Response from: {{env.api_url}}</h3>
+        </div>
+        <div class="panel-body">
+          <p>Please check configuration setting: API_URL</p>
+        </div>
+      </div>
     </div>
     <div ng-if="apiConnectionStatus.state=='success'">
-      <div class="alert alert-success text-center">
-
-        {{apiConnectionStatus.msg}}
-        <p>Connected to : {{env.api_url}}</p>
-      </div>
+      <div class="alert alert-success text-center">{{apiConnectionStatus.msg}}</div>
 
       <div class="panel panel-success">
         <div class="panel-heading">
-          <h3 class="panel-title">Response :</h3>
+          <h3 class="panel-title">Response from: {{env.api_url}}</h3>
         </div>
         <div class="panel-body">
           <p>API Build Number: {{apiBuildnum}}</p>

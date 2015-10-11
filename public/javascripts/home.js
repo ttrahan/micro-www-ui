@@ -5,7 +5,10 @@ var app = angular.module('micro-www', []);
 
 app.controller('mainCtrl',
   function ($scope, $log, env_factory, factory) {
-    $scope.message = {'type': 'info'};
+    $scope.apiConnectionStatus = {
+      'state': 'success',
+      'msg': 'Connection to API micro service, SUCCEEDED'
+    };
     $scope.log = $log;
     $scope.env = {};
     $scope.apiMessage = '';
@@ -38,9 +41,9 @@ app.controller('mainCtrl',
               $scope.apiAccessTime = new Date(data.time).toLocaleTimeString();
           })
           .error(function () {
-            $scope.message = {
-              'type': 'error',
-              'text': 'Unable to connect to API!'
+            $scope.apiConnectionStatus = {
+              'state': 'error',
+              'msg': 'Connection to API micro service, FAILED'
             };
           }
         );

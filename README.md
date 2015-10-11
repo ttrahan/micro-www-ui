@@ -1,4 +1,4 @@
-# image-www
+# micro-www
 Front end nodejs micro service. Communicates with micro-api. 
 
 # Environmental variables (optional):

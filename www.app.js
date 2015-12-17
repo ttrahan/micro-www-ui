@@ -43,7 +43,7 @@ app.use(
   }
 );
 
-var PORT = process.env.WWW_PORT || '3000';
+var PORT = process.env.WWW_PORT || '80';
 
 app.listen(PORT,
   function () {

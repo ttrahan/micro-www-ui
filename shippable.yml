@@ -24,10 +24,10 @@ env:
     - AWS_DOCKER_CONFIG=dockerconfig.$ACCOUNT_IDENTIFIER.$AWS_EB_ENVIRONMENT
     # encrypted variable for AWS_ACCESS_KEY_ID, unique to each Shippable project
     # you must generate your own hash within Shippable project settings
-    - secure: CdyK4pKL29DRdkDRHFip9g5L/6xV71CChHwbDSL07Yu87qZorpcyMjxW8CWwHEgSUxIffHqLJXybxRwFQm7VtMzYfkezJi6qA6zhhQtoBKyzGe+nUOE3E47sfEG1HZix+PA0TUJr8b7mgfqNCbQG5SPyqXLsDn2RjV2G7XbwByjBG3zA8czwob7B9ULavI3oycy6MJkvhs6oVCSsbvKKr2r/r4f2ZMeKezwPmi6Enk8rUuZRvxDCn+e/gmbCkRtvsMGSuEpSzygyCFdPV0WXdl1asHWy/kmZvoSwxvy3A290jkYJIf+X7DN1B3PKOEeP2/W3VGYMT8HsF89TbKqIiw==
+    - secure: e0kye8ehf5ZksrEEMkHCSbs8BJvhUdR54RZiZRw6DJ4uMC0bdW5MavBenw0ZX15llCX6Ohyjl0dJOxZzOCngQgom0b06N/Vx6jkD4Pwzinb6dulJhbka9Ktdp4wk01YiWEKAIuYtP61QRbA/6m7bCerRElM4rAZjOGuS3dGgsjPHRMkHNBixUL/s3FK1vsZWCspG2JS6MbFG6DsWl0YSyH0ayHrdGZx9IdS2F/SQnlAWlMljUcx1uBrXRqgsGm8Z+hwfRvRSm6yeRvGpM+3XXT1HXflwLNifgN6/yjWfCP3Vj3OoKfKDmWut+d4XVc4S0cukNhZ5kZl4BVhf1WwzNA==
     # encrypted variable for AWS_SECRET_ACCESS_KEY, unique to each Shippable project
     # you must generate your own hash within Shippable project settings
-    - secure: Sch466zBpjywJvFobHm9dieIekuQMWqAdTkEKz5ZNYjrYfejR2o+WWzY/vS0i6ut6ROKVBHXwGtgsdVT5fS+pbHgSpcUXZ/EKq2THgcDgus6BIoNdBlR37/ravcXKcKQXuN5HL4D6p9OMCR+LQX7ebt9FdVP+QQgDM//Vf20k6Jeyz2KP3/OLAFvGYRQPLQwez1TUX7b85+ySLowsz2AMoN9hLVFQpvrlvIBFi3SnAovlatQyCkZDA+Pz0zEB+wKs9tND3bv4J0GADfknmVmgcgwCNVS2LNt2Zgi9jX66EHGL5twdm11VYJbJ58EkQ0Uwm3GMhqqKVuShe5Ig/zzFw==
+    - secure: HOPLGw5OrSTsZXFlJwpJBRnG6VEHwgYodDoo12oHKjHDK5GSztOoj/Shl9Hhq+e3cOLyfhu9LqAi7zZyCh+IFhXcCkoiY56puHREhVLZ3r28muYIg8UuQ2m2BRfofUb/5IwS7C1yvyBp2B6ezrBEA8hdfwCdqh56WZdTvNTf/f/KeiDYkxvUCxac21WIVM8DV4CmbIqx54ZES79Vk1HYCWvkHNPW2OJs7qff4rUfaq5YOrRXmw3odLOiKEi4hT5MTcWO6LogPK6tIPIgslWaSUjQyZWvzE0UYaAzi7t9GyjnNmXw2SDT2qhpzXjWSPjeT01R7lP7lkj8iyRg8MFOBQ==
 
 build:
   pre_ci:
@@ -47,7 +47,7 @@ build:
   post_ci:
     - docker tag -f $REGISTRY_ACCOUNT/$AWS_EB_ENVIRONMENT:latest $REGISTRY_ACCOUNT/$AWS_EB_ENVIRONMENT:$BRANCH.$BUILD_NUMBER
     - docker push $REGISTRY_ACCOUNT/$AWS_EB_ENVIRONMENT:$BRANCH.$BUILD_NUMBER
-    - cat Dockerrun.aws.json | sed "s/<IMAGE_NAME>/$REGISTRY_ACCOUNT\/$AWS_EB_ENVIRONMENT/" | sed "s/<TAG>/$BRANCH.$BUILD_NUMBER/" | sed "s/<API_URL>/$API_URL/" | sed "s/<WWW_PORT>/$WWW_PORT/" | sed "s/<DEBUG_LEVEL>/$DEBUG_LEVEL/" | sed "s/<SHUD_LOG_TO_FILE>/$SHUD_LOG_TO_FILE/" | sed "s/<DOCKER_CONFIG>/$AWS_EB_APPLICATION\/$AWS_EB_ENVIRONMENT\/$AWS_DEPLOY_JSON.$BRANCH.$BUILD_NUMBER/" > $AWS_DEPLOY_JSON.$BRANCH.$BUILD_NUMBER
+    - cat Dockerrun.aws.json | sed "s/<IMAGE_NAME>/$REGISTRY_ACCOUNT\/$AWS_EB_ENVIRONMENT/" | sed "s/<TAG>/$BRANCH.$BUILD_NUMBER/" | sed "s/<API_URL>/$API_URL/" | sed "s/<WWW_PORT>/$WWW_PORT/" | sed "s/<DEBUG_LEVEL>/$DEBUG_LEVEL/" | sed "s/<SHUD_LOG_TO_FILE>/$SHUD_LOG_TO_FILE/" | sed "s/<DOCKER_CONFIG>/$AWS_EB_APPLICATION\/$AWS_EB_APPLICATION\/$AWS_EB_ENVIRONMENT\/$AWS_DEPLOY_JSON.$BRANCH.$BUILD_NUMBER/" > $AWS_DEPLOY_JSON.$BRANCH.$BUILD_NUMBER
     - aws s3 cp $AWS_DEPLOY_JSON.$BRANCH.$BUILD_NUMBER s3://$AWS_S3_BUCKET/$AWS_S3_FOLDER/$AWS_DEPLOY_JSON.$BRANCH.$BUILD_NUMBER --region=$AWS_REGION
     - aws s3 cp /root/.docker/config.json s3://$AWS_S3_BUCKET/$AWS_S3_FOLDER/$AWS_DOCKER_CONFIG.$BRANCH.$BUILD_NUMBER --region=$AWS_REGION
     - aws elasticbeanstalk create-application-version --application-name $AWS_EB_APPLICATION --version-label $ACCOUNT_IDENTIFIER.$AWS_EB_ENVIRONMENT.$BRANCH.$BUILD_NUMBER --source-bundle S3Bucket=$AWS_S3_BUCKET,S3Key=$AWS_S3_FOLDER/$AWS_DEPLOY_JSON.$BRANCH.$BUILD_NUMBER --region=$AWS_REGION
@@ -60,4 +60,4 @@ integrations:
         type: docker
         branches:
           only:
-            - amazon-elastic-beanstalk
+            - amazon-eb-cli

@@ -8,10 +8,6 @@ node_js:
 env:
   global:
     - XUNIT_FILE=./shippable/testresults/result.xml
-    - API_URL=http://micro-api.us-east-1.elasticbeanstalk.com:80
-    - WWW_PORT=80
-    - DEBUG_LEVEL=error
-    - SHUD_LOG_TO_FILE=true
     - AWS_EB_APPLICATION=aye0aye # existing EB application name
     - AWS_EB_ENVIRONMENT=micro-www # existing EB environment name
     - AWS_S3_BUCKET=shippable-demo-eb # existing S3 bucket that allows EB access

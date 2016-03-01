@@ -17,12 +17,12 @@ env:
     - ACCOUNT_IDENTIFIER=shippable.$REGISTRY_ACCOUNT
     - AWS_DEPLOY_JSON=Dockerrun.aws.json.$ACCOUNT_IDENTIFIER.$AWS_EB_ENVIRONMENT
     - AWS_DOCKER_CONFIG=dockerconfig.$ACCOUNT_IDENTIFIER.$AWS_EB_ENVIRONMENT
-    # encrypted variable for AWS_ACCESS_KEY_ID, unique to each Shippable project
+    # encrypted variable for AWS_ROLE_ARN, unique to each Shippable project
     # you must generate your own hash within Shippable project settings
-    - secure: e0kye8ehf5ZksrEEMkHCSbs8BJvhUdR54RZiZRw6DJ4uMC0bdW5MavBenw0ZX15llCX6Ohyjl0dJOxZzOCngQgom0b06N/Vx6jkD4Pwzinb6dulJhbka9Ktdp4wk01YiWEKAIuYtP61QRbA/6m7bCerRElM4rAZjOGuS3dGgsjPHRMkHNBixUL/s3FK1vsZWCspG2JS6MbFG6DsWl0YSyH0ayHrdGZx9IdS2F/SQnlAWlMljUcx1uBrXRqgsGm8Z+hwfRvRSm6yeRvGpM+3XXT1HXflwLNifgN6/yjWfCP3Vj3OoKfKDmWut+d4XVc4S0cukNhZ5kZl4BVhf1WwzNA==
-    # encrypted variable for AWS_SECRET_ACCESS_KEY, unique to each Shippable project
+    - secure: HBbBMKEIkwWtzLPT1bMPqAsjlzOhVKSyfA/NrPlTkEFbetgM84kxAf5yamTaSEJjuAbqpzY/1JUkYU/tfjIhFDL5XXCgsdKYsfYpidxtJRiVz2veypcUx4vUnh3TJj6TqAYLGB/tZSxkpP/tciro320qm8W/JSIQB/+lFpd9AdATER09WF5+pHI0NhnnKOrgSkU3VOwW/NwPFd+4qvR9cRUuwo5mxAa0b31WuFR9VigoUKgtpD15QOtQIu4dkTs6jYqldpuBbUQINiJiNo9YVDVHtTF7vcyU86YOYafsJk00F761vTR3sIYYWtSrCXkujCOabvcOVUOVvMPm1/810g==
+    # encrypted variable for SUB_ID, unique to each Shippable project
     # you must generate your own hash within Shippable project settings
-    - secure: HOPLGw5OrSTsZXFlJwpJBRnG6VEHwgYodDoo12oHKjHDK5GSztOoj/Shl9Hhq+e3cOLyfhu9LqAi7zZyCh+IFhXcCkoiY56puHREhVLZ3r28muYIg8UuQ2m2BRfofUb/5IwS7C1yvyBp2B6ezrBEA8hdfwCdqh56WZdTvNTf/f/KeiDYkxvUCxac21WIVM8DV4CmbIqx54ZES79Vk1HYCWvkHNPW2OJs7qff4rUfaq5YOrRXmw3odLOiKEi4hT5MTcWO6LogPK6tIPIgslWaSUjQyZWvzE0UYaAzi7t9GyjnNmXw2SDT2qhpzXjWSPjeT01R7lP7lkj8iyRg8MFOBQ==
+    - secure: VQ3wwCPTWG1+QlcZDD/iwkpFch7Kztab0fw6eA3Au9/ORRJJrdNjtvL+Vdqta/htvjbfc44rOmFuvFGt3yYXoYcrF0OslPdNB9dY6hp513dMClJVLCd11m1JU339Cv4aQ8YgRbzM3GsEbd3JKjn3NweKK+oPmZa1ilzUTO20ry2lQaCSzw42TTUo8bg3p3ExvexV51T1FTieAAtV6hzdJCGkjUYMgKED7DDViQNCUMTpQGQtE7EoFo9VF7g76vohR8aPVM96o4x9WeToezgEI6iANbpttopC0hD8+LrkotB8UbT1hcGf7uR0C8cf90r3sp+tgva/WuaTIWgjJXz31A==
 
 build:
   pre_ci:
@@ -36,8 +36,7 @@ build:
     pull: false
     options: --privileged=true
   ci:
-    - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-    - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+    - aws sts assume-role --role-arn $AWS_ARN --role-session-name tt --external-id $SUB_ID
     - aws configure set region $AWS_REGION
   post_ci:
     - docker tag -f $REGISTRY_ACCOUNT/$AWS_EB_ENVIRONMENT:latest $REGISTRY_ACCOUNT/$AWS_EB_ENVIRONMENT:$BRANCH.$BUILD_NUMBER

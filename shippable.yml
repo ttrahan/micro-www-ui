@@ -19,7 +19,7 @@ env:
     - AWS_DOCKER_CONFIG=dockerconfig.$ACCOUNT_IDENTIFIER.$AWS_EB_ENVIRONMENT
     # encrypted variable for AWS_ROLE_ARN, unique to each Shippable project
     # you must generate your own hash within Shippable project settings
-    - secure: HBbBMKEIkwWtzLPT1bMPqAsjlzOhVKSyfA/NrPlTkEFbetgM84kxAf5yamTaSEJjuAbqpzY/1JUkYU/tfjIhFDL5XXCgsdKYsfYpidxtJRiVz2veypcUx4vUnh3TJj6TqAYLGB/tZSxkpP/tciro320qm8W/JSIQB/+lFpd9AdATER09WF5+pHI0NhnnKOrgSkU3VOwW/NwPFd+4qvR9cRUuwo5mxAa0b31WuFR9VigoUKgtpD15QOtQIu4dkTs6jYqldpuBbUQINiJiNo9YVDVHtTF7vcyU86YOYafsJk00F761vTR3sIYYWtSrCXkujCOabvcOVUOVvMPm1/810g==
+    - secure: Rwhhm9fFZBcgHyvoA8i36foq3HCMXIaCZXYt29C5HI5knv7t8SeZacHHEilYDFu+lNbtVFIggI91LJbCNxciqeyf9D/ACdkzLZC8xx/vLILiKCjJqZBdqPNNUrDtmFNhGTCvy3qAjmKqZe9aeGO7TFu6LRlwhOJbtSzk+t6KgAjEITRbDqlE7mHoRvp+u2ekZvTDBrxOmtFTZAu9yMtjONsDrLmokJQKoOUBzK4paShkVLiDvGVyOxr8CFy5CSVT/aOCF1IM7lfZCFtveBBZg2IttcvrvlZWqLZL4q0F/NPn78Oz/o5LfvZ3wcXNR42H9+cTMxmCSs7ZTF1/pATXRg==
     # encrypted variable for SUB_ID, unique to each Shippable project
     # you must generate your own hash within Shippable project settings
     - secure: VQ3wwCPTWG1+QlcZDD/iwkpFch7Kztab0fw6eA3Au9/ORRJJrdNjtvL+Vdqta/htvjbfc44rOmFuvFGt3yYXoYcrF0OslPdNB9dY6hp513dMClJVLCd11m1JU339Cv4aQ8YgRbzM3GsEbd3JKjn3NweKK+oPmZa1ilzUTO20ry2lQaCSzw42TTUo8bg3p3ExvexV51T1FTieAAtV6hzdJCGkjUYMgKED7DDViQNCUMTpQGQtE7EoFo9VF7g76vohR8aPVM96o4x9WeToezgEI6iANbpttopC0hD8+LrkotB8UbT1hcGf7uR0C8cf90r3sp+tgva/WuaTIWgjJXz31A==

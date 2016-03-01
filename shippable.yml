@@ -36,7 +36,7 @@ build:
     pull: false
     options: --privileged=true
   ci:
-    - aws sts assume-role --role-arn $AWS_ARN --role-session-name tt --external-id $SUB_ID
+    - aws sts assume-role --role-arn $AWS_ROLE_ARN --role-session-name tt --external-id $SUB_ID
     - aws configure set region $AWS_REGION
   post_ci:
     - docker tag -f $REGISTRY_ACCOUNT/$AWS_EB_ENVIRONMENT:latest $REGISTRY_ACCOUNT/$AWS_EB_ENVIRONMENT:$BRANCH.$BUILD_NUMBER

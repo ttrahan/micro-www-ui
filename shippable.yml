@@ -53,8 +53,8 @@ build:
 
 integrations:
     hub:
-      - integrationName: "Docker Hub"
-        type: docker
+      - integrationName: "Amazon ECR"
+        type: ecr
         branches:
           only:
             - amazon-eb-cli-beta

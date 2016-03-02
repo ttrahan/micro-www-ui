@@ -10,19 +10,10 @@ env:
     - XUNIT_FILE=./shippable/testresults/result.xml
     - AWS_EB_APPLICATION=aye0aye # existing EB application name
     - AWS_EB_ENVIRONMENT=micro-www-beta # existing EB environment name
-    - AWS_S3_BUCKET=shippable-demo-eb # existing S3 bucket that allows EB access
-    - AWS_S3_FOLDER=$AWS_EB_APPLICATION/$AWS_EB_ENVIRONMENT # S3 folder to use
-    - AWS_REGION=us-east-1 # AWS region to deploy into
     - REGISTRY_ACCOUNT=288971733297.dkr.ecr.us-east-1.amazonaws.com # image registry account name, e.g. Docker Hub account
     - ACCOUNT_IDENTIFIER=shippable.$REGISTRY_ACCOUNT
     - AWS_DEPLOY_JSON=Dockerrun.aws.json.$ACCOUNT_IDENTIFIER.$AWS_EB_ENVIRONMENT
     - AWS_DOCKER_CONFIG=dockerconfig.$ACCOUNT_IDENTIFIER.$AWS_EB_ENVIRONMENT
-    # encrypted variable for AWS_ROLE_ARN, unique to each Shippable project
-    # you must generate your own hash within Shippable project settings
-    - secure: lwOpMfmiaLIih4i6IjauUrr9CKjJgji0H1egaFWV/aSCByyX17A8/jvtoyV8mhSUu0Bi+YSUj/x573A1/LUDrXAnkm+4pYVDBtZC2dby+nsI8DeSy88zHS1ivUBR7hnIXMEPBkCzKb/oUAi8bBf/si5su1dJ2Zph/jY2FNUBGfQU4gpKEen0Xd00iYuTkiDvwW+kOAwayNZ8OxMSh4Isw4qfqwfmX3Jh1DewErUqo1Gc3E1N/sDUvWj+yFgEc4IFq1SyNFPTNgPEjkoBT4VG5VkPc6Ihy5ewbFSUyPcu7aovGkHTYmoXWbSIXTGuT24j80q+/24FBXcnpM31FJHOOw==
-    # encrypted variable for AWS_SECRET_ACCESS_KEY, unique to each Shippable project
-    # you must generate your own hash within Shippable project settings
-    - secure: oIGduJP3vnPK+bfg/YodNvYPBAZ9vMrHPWYVvxbjECzXOFz8xjprYXz90HOJLp8sSzmExcWnqSZ71t5RaJd/Nk9bhrBcqfwYhcXrK0a7YMRWAIce8yZZ/9m+BGEySZQiKhBp0MAHFyA0SEphNjV0/0frZrTpOgEQHr/jkGqlfKO80aR9IQVnMOeL1GtpaOooS22qSK6V+DvzXwgajQsjwRZYUq0ELjH9WhDNUkoaaolAy1O+Fwu524iWUtLR+M2u5HAYeHLlBxGmVYLCMhbXurN3NRcq2xdVeuT/GVY8IHQbNKLp6WnLvBOyvHqy3McNcZmK0yFR4HNvH7gw+kToqQ==
 
 build:
   pre_ci:
@@ -35,21 +26,10 @@ build:
     image_tag: latest
     pull: false
     options: --privileged=true
-  ci:
-    - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-    - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-    - aws configure set region $AWS_REGION
   post_ci:
     - docker tag -f $REGISTRY_ACCOUNT/$AWS_EB_APPLICATION/$AWS_EB_ENVIRONMENT:latest $REGISTRY_ACCOUNT/$AWS_EB_APPLICATION/$AWS_EB_ENVIRONMENT:$BRANCH.$BUILD_NUMBER
     - docker push $REGISTRY_ACCOUNT/$AWS_EB_APPLICATION/$AWS_EB_ENVIRONMENT:$BRANCH.$BUILD_NUMBER
     - cat Dockerrun.aws.json | sed "s/<IMAGE_NAME>/$REGISTRY_ACCOUNT\/$AWS_EB_APPLICATION\/$AWS_EB_ENVIRONMENT/" | sed "s/<TAG>/$BRANCH.$BUILD_NUMBER/" | sed "s~<API_URL>~$API_URL~" | sed "s/<WWW_PORT>/$WWW_PORT/" | sed "s/<DEBUG_LEVEL>/$DEBUG_LEVEL/" | sed "s/<SHUD_LOG_TO_FILE>/$SHUD_LOG_TO_FILE/" | sed "s/<DOCKER_CONFIG>/$AWS_EB_APPLICATION\/$AWS_EB_ENVIRONMENT\/$AWS_DOCKER_CONFIG.$BRANCH.$BUILD_NUMBER/" > $AWS_DEPLOY_JSON.$BRANCH.$BUILD_NUMBER
-    - cat .ebextensions/eb.config | sed "s~<API_URL>~$API_URL~" | sed "s/<WWW_PORT>/$WWW_PORT/" | sed "s/<DEBUG_LEVEL>/$DEBUG_LEVEL/" | sed "s/<SHUD_LOG_TO_FILE>/$SHUD_LOG_TO_FILE/" > $AWS_DEPLOY_JSON.$BRANCH.$BUILD_NUMBER.config
-    - aws s3 cp $AWS_DEPLOY_JSON.$BRANCH.$BUILD_NUMBER s3://$AWS_S3_BUCKET/$AWS_S3_FOLDER/$AWS_DEPLOY_JSON.$BRANCH.$BUILD_NUMBER --region=$AWS_REGION
-    - aws s3 cp $AWS_DEPLOY_JSON.$BRANCH.$BUILD_NUMBER.config s3://$AWS_S3_BUCKET/$AWS_S3_FOLDER/.ebextensions/environmentVariables.config --region=$AWS_REGION
-    - aws s3 cp /root/.docker/config.json s3://$AWS_S3_BUCKET/$AWS_S3_FOLDER/$AWS_DOCKER_CONFIG.$BRANCH.$BUILD_NUMBER --region=$AWS_REGION
-    - aws elasticbeanstalk create-application-version --application-name $AWS_EB_APPLICATION --version-label $ACCOUNT_IDENTIFIER.$AWS_EB_ENVIRONMENT.$BRANCH.$BUILD_NUMBER --source-bundle S3Bucket=$AWS_S3_BUCKET,S3Key=$AWS_S3_FOLDER/$AWS_DEPLOY_JSON.$BRANCH.$BUILD_NUMBER --region=$AWS_REGION
-    - sleep 20s #This sleep is to make sure the image is available in the registry
-    - aws elasticbeanstalk update-environment --environment-name $AWS_EB_ENVIRONMENT --version-label $ACCOUNT_IDENTIFIER.$AWS_EB_ENVIRONMENT.$BRANCH.$BUILD_NUMBER --region=$AWS_REGION
 
 integrations:
     hub:
@@ -57,4 +37,4 @@ integrations:
         type: ecr
         branches:
           only:
-            - amazon-eb-cli-beta
+            - amazon-eb-ui-beta
